@@ -25,5 +25,6 @@ namespace NPL.SMS
             SqlCommand cmd = new SqlCommand(query, conn);
             return cmd;
         }
+        //thuong da sua ngay day
     }
 }
