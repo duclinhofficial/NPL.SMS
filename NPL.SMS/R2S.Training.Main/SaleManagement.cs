@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NPL.SMS.R2S.Training.DAO;
 using NPL.SMS.R2S.Training.Entities;
+using System.Formats;
 
 namespace NPL.SMS.R2S.Training.Main
 {
@@ -23,7 +24,7 @@ namespace NPL.SMS.R2S.Training.Main
             const string EXIT = "0";
 
             //Khoi tao 
-            LineItemDAO test = new LineItemDAO();
+            LineItemDAO lineItem = new LineItemDAO();
             CustomerDAO CD = new CustomerDAO();
             OrderDAO OD = new OrderDAO();
 
@@ -69,21 +70,27 @@ namespace NPL.SMS.R2S.Training.Main
             void Get_All_Items_By_Order_Id()
             {
 
-                Console.WriteLine("Lay tat ca Line Item Co Order ID: ");
+                Console.Write("Get All Line Item by Order ID: ");
                 int findId = int.Parse(Console.ReadLine());
                 //Khoi tao res de nhan cac LineItem co cung OrderId
                 List<LineItem> res;
                 //thuc hien chuc nang lai tat ca cac LineItem co cung OrderId
-                res = test.GetAllItemsByOrderId(findId);
+                res = lineItem.GetAllItemsByOrderId(findId);
 
                 //In ket qua
-                Console.WriteLine("{0}      {1}        {2}       {3}", "OrderId", "ProductId", "Quantity", "Price");
-                if (res != null)
+
+                if (res != null && res.Count > 0)
                 {
+                    Console.WriteLine("{0}   {1}   {2}\t\t{3}", "OrderId", "ProductId", "Quantity", "Price");
                     for (byte i = 0; i < res.Count; i++)
                     {
-                        Console.WriteLine("{0}      {1}        {2}       {3}", res[i].OrderId, res[i].ProductId, res[i].Quatity, res[i].Price);
+                        Console.WriteLine("{0}\t  {1}\t\t{2}\t\t{3}", res[i].OrderId, res[i].ProductId, res[i].Quatity, res[i].Price);
                     }
+
+                }
+                else
+                {
+                    Console.WriteLine("Don't Find");
                 }
             }
 
@@ -124,25 +131,25 @@ namespace NPL.SMS.R2S.Training.Main
             //Cau 9: ADD_LINE_ITEM
             void Add_Line_Item()
             {
-
                 //câu 3 khoi tao t để chứa LineItem can them vao
-                LineItem t = new LineItem();
+                LineItem item = new LineItem();
 
-                Console.WriteLine("Them LineItem vao DB");
+                Console.WriteLine("Create Line Item into database...");
 
-                Console.Write("Nhap Order ID: ");
-                t.OrderId = int.Parse(Console.ReadLine());
-                Console.Write("Nhap Product ID: ");
-                t.ProductId = int.Parse(Console.ReadLine());
-                Console.Write("Nhap Quatity: ");
-                t.Quatity = int.Parse(Console.ReadLine());
-                Console.Write("Nhap Price: ");
-                t.Price = double.Parse(Console.ReadLine());
+                Console.Write("Enter Order ID: ");
+                item.OrderId = int.Parse(Console.ReadLine());
+                Console.Write("Enter Product ID: ");
+                item.ProductId = int.Parse(Console.ReadLine());
+                Console.Write("Enter Quatity: ");
+                item.Quatity = int.Parse(Console.ReadLine());
+                Console.Write("Enter Price: ");
+                item.Price = double.Parse(Console.ReadLine());
+
                 //thuc hien chuc nang them mot LineItem vao data base
-                if (test.AddLineItem(t) == true)
-                    Console.WriteLine("Them LineItem thanh cong");
+                if (lineItem.AddLineItem(item) == true)
+                    Console.WriteLine("Successfully!");
                 else
-                    Console.WriteLine("Them LineItem that bai");
+                    Console.WriteLine("Failed!");
             }
 
             //Cau 10: UPDATE_ORDER_TOTAL
