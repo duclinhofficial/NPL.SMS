@@ -116,13 +116,54 @@ namespace NPL.SMS.R2S.Training.Main
             void Add_Customer()
             { }
 
-            //Cau 6: DELETE_CUSTOMER
+
+            // Cau 6: DELETE_CUSTOMER()
             void Delete_Customer()
-            { }
+            {
+                Customer info = new Customer();
+                // Id to delete
+                Console.Write("Enter id: ");
+                info.CustomerId = Convert.ToInt32(Console.ReadLine());
+                CustomerDAO test = new CustomerDAO();
+                if (test.DeleteCustomer(info.CustomerId) == true)
+                {
+                    Console.WriteLine("Successfully");
+                }
+                else
+                {
+                    Console.WriteLine("Failed");
+                }
+
+
+            }
 
             //Cau 7: UPDATE_CUSTOMER
             void Update_Customer()
-            { }
+            {
+                Customer info = new Customer();
+                CustomerDAO test = new CustomerDAO();
+                Console.Write("Enter id: ");
+                info.CustomerId = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter new name: ");
+                info.CustomerName = Console.ReadLine();
+                try
+                {
+                    if (test.UpdateCustomer(info) == true)
+                    {
+                        Console.WriteLine("Successfully");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+
+            }
 
             //Cau 8: ADD_ORDER
             void Add_Order()

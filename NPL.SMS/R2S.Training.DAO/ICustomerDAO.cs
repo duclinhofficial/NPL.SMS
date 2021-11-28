@@ -9,5 +9,8 @@ namespace NPL.SMS.R2S.Training.DAO
     {
         //Cau 2: Lay tat ca orders theo customer id
         List<Order> GetAllOrdersByCustomerId(int customerId);
+
+        bool DeleteCustomer(int customerId);
+        bool UpdateCustomer(Customer customer);
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace NPL.SMS.R2S.Training.DAO
 {
@@ -12,6 +13,8 @@ namespace NPL.SMS.R2S.Training.DAO
     {
         // Khai bao const string
         const string GET_ORDER_BY_CUSTOMERID = "SELECT * FROM Orders WHERE customer_id=@customerId";
+        const string UPDATE_CUSTOMER = "SMS.dbo.SP_updateCustomer";
+        const string DELETE_CUSTOMER = "SMS.dbo.SP_deleteCustomer";
 
 
         // Cau 2: Lay tat ca order theo customer id
@@ -61,6 +64,58 @@ namespace NPL.SMS.R2S.Training.DAO
             return list;
         }
 
+        //Cau 7
+        public bool UpdateCustomer(Customer customer)
+        {
+            //Khoi tao SqlConnection conn
+            using SqlConnection conn = Connect.GetSqlConnection();
+            conn.Open();
+            //Tao Sqlcommand 
+            using SqlCommand cmd = Connect.GetSqlCommand(UPDATE_CUSTOMER, conn);
+
+            //  Add multiple parameters to SQL command in one statement
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            //Tao nhieu parmeter 
+            cmd.Parameters.AddRange(new[]
+            {
+                new SqlParameter("@customerID", customer.CustomerId),
+                new SqlParameter("@customerName", customer.CustomerName)
+            });
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        //cau 6
+        public bool DeleteCustomer(int customerId)
+        {
+            //Mở kết nối
+            using SqlConnection conn = Connect.GetSqlConnection();
+
+            // Create parameter
+            SqlParameter param = new SqlParameter
+            {
+                ParameterName = "@customerId",
+                Value = customerId
+            };
+
+            // Create a sql command
+            using SqlCommand cmd = Connect.GetSqlCommand(DELETE_CUSTOMER, conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(param);
+            try
+            {
+                // Open a connection
+                conn.Open();
+
+                // Execute sql delete command
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return true;
+        }
 
     }
 }
