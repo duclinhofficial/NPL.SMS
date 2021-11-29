@@ -7,10 +7,13 @@ namespace NPL.SMS.R2S.Training.DAO
 {
     interface ICustomerDAO
     {
+        //Cau 1: List tat ca customers o order tale
+        List<Customer> GetAllCustomers();
+
         //Cau 2: Lay tat ca orders theo customer id
         List<Order> GetAllOrdersByCustomerId(int customerId);
 
-        bool DeleteCustomer(int customerId);
-        bool UpdateCustomer(Customer customer);
+        //Cau 5: Them mot khach hang moi
+        bool AddCustomer(Customer customer);
     }
 }

@@ -15,7 +15,37 @@ namespace NPL.SMS.R2S.Training.DAO
         const string GET_ORDER_BY_CUSTOMERID = "SELECT * FROM Orders WHERE customer_id=@customerId";
         const string UPDATE_CUSTOMER = "SMS.dbo.SP_updateCustomer";
         const string DELETE_CUSTOMER = "SMS.dbo.SP_deleteCustomer";
+        const string SELECT_ALLCUSTOMERS = "SELECT * FROM Customer WHERE EXISTS(SELECT Orders.customer_id FROM Orders WHERE Orders.customer_id = Customer.customer_id)";
+        const string ADD_CUSTOMER = "sp_add_customer";
 
+        // Cau 1: List tat ca customer o order table
+
+        public List<Customer> GetAllCustomers()
+        {
+            //Creat connection 
+            using SqlConnection conn = Connect.GetSqlConnection();
+
+            //Open connection
+            conn.Open();
+
+            using SqlCommand cmd = Connect.GetSqlCommand(SELECT_ALLCUSTOMERS, conn); //Creat a sql command 
+            using SqlDataReader dataReader = cmd.ExecuteReader(); // Execute command 
+
+            List<Customer> list = new List<Customer>();
+            while (dataReader.Read())
+            {
+                Customer customer = new Customer
+                {
+                    CustomerId = dataReader.GetInt32(0),
+                    CustomerName = dataReader.GetString(1)
+                };
+
+                list.Add(customer);
+            }
+
+            return list;
+
+        }
 
         // Cau 2: Lay tat ca order theo customer id
         public List<Order> GetAllOrdersByCustomerId(int customerId)
@@ -62,6 +92,36 @@ namespace NPL.SMS.R2S.Training.DAO
                 }
             }
             return list;
+        }
+
+        //Cau 5: Them mot khach hang moi su dung Stored Procedure
+        public bool AddCustomer(Customer customer)
+        {
+            //Creat connection
+            using SqlConnection conn = Connect.GetSqlConnection();
+
+            //Open connection
+            conn.Open();
+
+            //Creat parameter 
+            SqlParameter param = new SqlParameter
+            {
+                ParameterName = "@customerName",
+                Value = customer.CustomerName
+            };
+
+            //Creat sql command 
+            using SqlCommand cmd = Connect.GetSqlCommand(ADD_CUSTOMER, conn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            //Add parameter to sql command 
+            cmd.Parameters.Add(param);
+
+            //Execute sql delete command and return logic status
+            if (cmd.ExecuteNonQuery() > 0)
+                return true;
+            else
+                return false;
         }
 
         //Cau 7

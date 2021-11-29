@@ -18,10 +18,6 @@ namespace NPL.SMS.R2S.Training.DAO
 
         public bool AddLineItem(LineItem item)
         {
-            if (CheckOrderId(item.OrderId) == false || CheckProductId(item.ProductId) == false)
-            {
-                return false;
-            }
             //Tao ket noi SqlConnection
             using SqlConnection connString = Connect.GetSqlConnection();
 
@@ -43,7 +39,6 @@ namespace NPL.SMS.R2S.Training.DAO
                 connString.Open();
                 //gui den cmd
                 cmd.ExecuteNonQuery();
-
             }
             catch
             {
@@ -89,67 +84,6 @@ namespace NPL.SMS.R2S.Training.DAO
                 return null;
             }
             return items;
-        }
-
-
-        const string CHECK_ORDERID = "SELECT COUNT(*) FROM Orders WHERE order_id = @orderId";
-
-        //Check order id in table Order
-        public bool CheckOrderId(int orderId)
-        {
-            SqlConnection conn = Connect.GetSqlConnection();
-
-            SqlCommand cmd = Connect.GetSqlCommand(CHECK_ORDERID, conn);
-
-            SqlParameter param = new SqlParameter("@orderId", orderId);
-            //them params vao cmd
-            cmd.Parameters.Add(param);
-
-            try
-            {
-                conn.Open();
-
-                int listOrderID = (int)cmd.ExecuteScalar();
-
-                if (listOrderID > 0)
-                    return true;
-                else
-                    return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        const string CHECK_PRODUCTID = "SELECT COUNT(*) FROM Product WHERE product_id = @product_id";
-
-        //Check order id in table Order
-        public bool CheckProductId(int productID)
-        {
-            SqlConnection conn = Connect.GetSqlConnection();
-
-            SqlCommand cmd = Connect.GetSqlCommand(CHECK_PRODUCTID, conn);
-
-            SqlParameter param = new SqlParameter("@product_id", productID);
-            //them params vao cmd
-            cmd.Parameters.Add(param);
-
-            try
-            {
-                conn.Open();
-
-                int countProducID = (int)cmd.ExecuteScalar();
-
-                if (countProducID > 0)
-                    return true;
-                else
-                    return false;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }

@@ -31,6 +31,19 @@ namespace NPL.SMS.R2S.Training.Main
             //Cau 1: Get all customer
             void Get_All_Customer()
             {
+                List<Customer> list = CD.GetAllCustomers();
+
+                if (list.Count == 0)
+                {
+                    Console.WriteLine("--> LIST IS EMPTY!");
+                }
+                else
+                {
+                    foreach (Customer customers in list)
+                    {
+                        Console.WriteLine("Customer Id: {0}, Customer Name: {1}",customers.CustomerId, customers.CustomerName);
+                    }
+                }
             }
 
             //Cau 2: lay tat ca order theo customer id
@@ -114,7 +127,28 @@ namespace NPL.SMS.R2S.Training.Main
 
             //Cau 5: ADD_CUSTOMER
             void Add_Customer()
-            { }
+            {
+                Customer customer = new Customer();
+
+                Console.Write("Enter name: ");
+                customer.CustomerName = Console.ReadLine();
+
+                try
+                {
+                    if (CD.AddCustomer(customer))
+                    {
+                        Console.WriteLine("Add successful! ");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Add_Customer failed! ");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
 
 
             // Cau 6: DELETE_CUSTOMER()
