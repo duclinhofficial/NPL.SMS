@@ -113,3 +113,9 @@ BEGIN
 	RETURN @total_price;
 END
 GO
+
+--Cau 5: Stored Add Customer
+GO
+CREATE PROC sp_add_customer(@customerName NVARCHAR(100))
+AS
+INSERT INTO dbo.Customer(customer_name) VALUES (@customerName)
