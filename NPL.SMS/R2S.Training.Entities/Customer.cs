@@ -40,5 +40,10 @@ namespace NPL.SMS
             get => customerName;
             set => customerName = value;
         }
+
+        public override string ToString()
+        {
+            return String.Format("Customer Id: {0}    Customer Name: {1}      ", customerId, customerName);
+        }
     }
 }

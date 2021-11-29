@@ -41,7 +41,7 @@ namespace NPL.SMS.R2S.Training.Main
                 {
                     foreach (Customer customers in list)
                     {
-                        Console.WriteLine("Customer Id: {0}, Customer Name: {1}",customers.CustomerId, customers.CustomerName);
+                        Console.WriteLine(customers.ToString());
                     }
                 }
             }
