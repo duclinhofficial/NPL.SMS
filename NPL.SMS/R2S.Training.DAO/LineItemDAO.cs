@@ -18,10 +18,8 @@ namespace NPL.SMS.R2S.Training.DAO
 
         public bool AddLineItem(LineItem item)
         {
-            //Tao ket noi SqlConnection
             using SqlConnection connString = Connect.GetSqlConnection();
-
-            //tao sqlcmd de chi dinh tuong tac them item xuong db
+            
             using SqlCommand cmd = Connect.GetSqlCommand(ADD_LINE_ITEM, connString);
 
             //them cac param 
@@ -37,7 +35,7 @@ namespace NPL.SMS.R2S.Training.DAO
             try
             {   //mo ket noi
                 connString.Open();
-                //gui den cmd
+
                 cmd.ExecuteNonQuery();
             }
             catch
@@ -51,11 +49,11 @@ namespace NPL.SMS.R2S.Training.DAO
         {
             // tao list items de chua cac lineitem theo orderid
             List<LineItem> items = new List<LineItem>();
-            //Tao ket noi SqlConnection
-            using SqlConnection connString = Connect.GetSqlConnection();//cau truy can
-            //chi dinh truy van voi query va conn
+
+            using SqlConnection connString = Connect.GetSqlConnection();
+
             SqlCommand cmd = new SqlCommand(GET_ALL_LINE_ITEM, connString);
-            //tao params
+
             SqlParameter param = new SqlParameter("@order", orderId);
             //them params vao cmd
             cmd.Parameters.Add(param);
@@ -63,7 +61,7 @@ namespace NPL.SMS.R2S.Training.DAO
             try
             {   //tao ket noi
                 connString.Open();
-                //gioi ExecuteReader de thuc thi va nhan ket qua
+
                 SqlDataReader listItems = cmd.ExecuteReader();
 
                 while (listItems.Read())
