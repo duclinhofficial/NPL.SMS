@@ -10,5 +10,9 @@ namespace NPL.SMS.R2S.Training.DAO
     {
         //Cau 4: Tinh tong order 
         Double ComputeOrderTotal(int orderId);
+        //Cau 8: Add Order
+        bool AddOrder(OrderDAO order);
+        //Cau 10: Update Order Total
+        bool UpdateOrderTotal(int orderId);
     }
 }
