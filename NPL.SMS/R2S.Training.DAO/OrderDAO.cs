@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NPL.SMS.R2S.Training.Entities;
 
 namespace NPL.SMS.R2S.Training.DAO
 {
@@ -13,10 +14,10 @@ namespace NPL.SMS.R2S.Training.DAO
         //Khai bao chuoi lenh
         const string COMPUTE_ORDER_TOTAL = "SELECT dbo.FN_Compute_OrderTotal(@Order_id)";
         private const string UPDATE = "Update Orders set total  = @total where order_id = @order_id";
-        private const string ADD_ORDOR = "INSERT INTO [dbo].[Order](order_id, order_date, customerId, EmployeeId,total) VALUES(@order_id,@order_date,@customerId,@EmloyeeId,@total)";
-        private const string SELECT_ALL_ORDER = "Select* from Order";
+        private const string ADD_ORDER = @"INSERT INTO [dbo].[Orders](order_date, customer_id, employee_id,total) VALUES(@order_date,@customer_id,@employee_id,@total)";
+        private const string SELECT_ALL_ORDER = "Select* from Orders";
 
-        //Tinh tong order
+        // Cau 4: Tinh tong order
         public double ComputeOrderTotal(int orderId)
         {
             // Khoi tao ket noi
@@ -41,8 +42,22 @@ namespace NPL.SMS.R2S.Training.DAO
                 return 0;
             }
         }
+
+        public bool checkOrder(int orderId)
+        {
+            using SqlConnection conn = Connect.GetSqlConnection();
+            conn.Open();
+            using SqlCommand cmd = Connect.GetSqlCommand(SELECT_ALL_ORDER, conn);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                if (orderId == (int)reader["order_id"])
+                    return true;
+            }
+            return false;
+        }
         // Cau 10 Cập nhậtt tổng order vào cơ sở dữ liệu 
-        public bool UpdateOrderToral(int orderId)
+        public bool UpdateOrderTotal(int orderId)
         {
             using SqlConnection sqlcon = Connect.GetSqlConnection();
             sqlcon.Open();
@@ -63,39 +78,24 @@ namespace NPL.SMS.R2S.Training.DAO
                 });
                 sqlcmd.ExecuteNonQuery();
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
-            return false;
-        }
-        public bool checkOrder(int orderId)
-        {
-            using SqlConnection conn = Connect.GetSqlConnection();
-            conn.Open();
-            using SqlCommand = Connect.GetSqlConnection(SELECT_ALL_ORDER, conn);
-            while (reader.Read())
-            {
-                if (orderId == (int)reader["order_id"])
-                    return true;
-            }
-            return false;
-             
-
-
+            return true;
         }
         // Cau 8: Add Order
         public bool AddOrder(Order order)
         {
             using SqlConnection conn = Connect.GetSqlConnection();
 
-            using SqlConnection cmd = Connect.GetSqlCommand(ADD_ORDER, conn);
+            using SqlCommand cmd = Connect.GetSqlCommand(ADD_ORDER, conn);
 
             // Thêm parameter
             cmd.Parameters.AddRange(new[]
             {
-                new SqlParameter("@order_id", order.OrderId),
-                new SqlParameter("@order_date"),order.OrderDate),
+                new SqlParameter("@order_date",order.OrderDate),
                 new SqlParameter("@customer_id",order.CustomerId),
                 new SqlParameter("@employee_id",order.EmployeeId),
                 new SqlParameter("@total",order.Total),
@@ -103,12 +103,13 @@ namespace NPL.SMS.R2S.Training.DAO
             try
             {
                 // Mở kết nối 
-                con.Open();
+                conn.Open();
                 cmd.ExecuteNonQuery();
 
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
             return true;

@@ -10,7 +10,7 @@ namespace NPL.SMS
     public class Connect
     {
         // Tao chuoi ket noi
-        private const string connString = "Data Source=DESKTOP-CLJH20Q\\THUONG;Initial Catalog=SMS;User ID=sa;Password=sa";
+        private const string connString = "Data Source=DESKTOP-MGA8H1J\\LINHHOCTAP;Initial Catalog=SMS;User ID=sa;Password=hoctap123";
 
         //Tao doi tuong Sql Connection
         public static SqlConnection GetSqlConnection()

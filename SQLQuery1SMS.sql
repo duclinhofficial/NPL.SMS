@@ -120,10 +120,12 @@ CREATE PROC sp_add_customer(@customerName NVARCHAR(100))
 AS
 INSERT INTO dbo.Customer(customer_name) VALUES (@customerName)
 
+GO
+
 USE SMS
 GO
 --cau 6 delete customer (Orders and LineItem)
-CREATE PROC sp_deleteCustomer (@customerId int)
+CREATE PROC SP_deleteCustomer (@customerId int)
 
 AS 
 DECLARE @t int
@@ -136,6 +138,6 @@ DELETE FROM dbo.Orders WHERE customer_id = @customerId
 
 USE SMS
 GO
-CREATE PROCEDURE sms_capnhat (@customerID int ,@customerName nvarchar(100))
+CREATE PROCEDURE SP_updateCustomer (@customerID int ,@customerName nvarchar(100))
 AS
 UPDATE dbo.Customer SET  customer_name = @customerName WHERE customer_id = @customerID

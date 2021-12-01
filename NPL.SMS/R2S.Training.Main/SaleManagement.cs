@@ -203,12 +203,11 @@ namespace NPL.SMS.R2S.Training.Main
             void Add_Order()
             {
                 Order order = new Order();
+                OrderDAO orderDAO = new OrderDAO();
                 Console.WriteLine("Create Order into data base");
 
-                Console.Write("Enter OrderID: ");
-                order.OrderId = int.Parse(Console.ReadLine());
                 Console.Write("Enter order Date: ");
-                order.OrderDate = int.Parse(Console.ReadLine());
+                order.OrderDate = DateTime.Parse(Console.ReadLine());
 
                 Console.Write("Enter CustomerId: ");
                 order.CustomerId = int.Parse(Console.ReadLine());
@@ -218,7 +217,7 @@ namespace NPL.SMS.R2S.Training.Main
                 order.Total = double.Parse(Console.ReadLine());
 
                 // Thực hiện chức năng thêm một order vào data base
-                if (Order.AddOrder(order) == true)
+                if (orderDAO.AddOrder(order) == true)
                     Console.WriteLine("Successfully");
                 else
                     Console.WriteLine("Failed");
@@ -250,11 +249,12 @@ namespace NPL.SMS.R2S.Training.Main
 
             //Cau 10: UPDATE_ORDER_TOTAL
             void Update_Order_Total()
-            { 
-                onsole.WriteLine("Enter order ID");
+            {
+                OrderDAO orderDAO = new OrderDAO();
+                Console.WriteLine("Enter order ID");
                     int orderId;
                     orderId = Convert.ToInt32(Console.ReadLine());
-                    if (Order.UpdateOrderTotal(orderId))
+                    if (orderDAO.UpdateOrderTotal(orderId))
                         Console.WriteLine("Succesfully");
                     else
                         Console.WriteLine("Failed");
