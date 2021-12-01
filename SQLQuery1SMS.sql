@@ -130,3 +130,12 @@ DECLARE @t int
 DELETE FROM dbo.Customer WHERE customer_id =@customerId
 DELETE FROM dbo.LineItem WHERE order_id IN (SELECT order_id FROM Orders WHERE customer_id=@customerId)
 DELETE FROM dbo.Orders WHERE customer_id = @customerId
+
+
+--cau 7
+
+USE SMS
+GO
+CREATE PROCEDURE sms_capnhat (@customerID int ,@customerName nvarchar(100))
+AS
+UPDATE dbo.Customer SET  customer_name = @customerName WHERE customer_id = @customerID
