@@ -119,3 +119,14 @@ GO
 CREATE PROC sp_add_customer(@customerName NVARCHAR(100))
 AS
 INSERT INTO dbo.Customer(customer_name) VALUES (@customerName)
+
+USE SMS
+GO
+--cau 6 delete customer (Orders and LineItem)
+CREATE PROC sp_deleteCustomer (@customerId int)
+
+AS 
+DECLARE @t int
+DELETE FROM dbo.Customer WHERE customer_id =@customerId
+DELETE FROM dbo.LineItem WHERE order_id IN (SELECT order_id FROM Orders WHERE customer_id=@customerId)
+DELETE FROM dbo.Orders WHERE customer_id = @customerId
