@@ -8,6 +8,7 @@ namespace NPL.SMS.R2S.Training.DAO
 {
     class LineItemDAO : ILineItem
     {
+        private OrderDAO orderDAO = new OrderDAO();
         private const byte ORDER_ID = 0;
         private const byte PRODUCT_ID = 1;
         private const byte QUANTITY = 2;
@@ -15,11 +16,43 @@ namespace NPL.SMS.R2S.Training.DAO
 
         private const string ADD_LINE_ITEM = "INSERT INTO [dbo].[LineItem](order_id, product_id, quantity, price) VALUES(@order_id, @product_id, @quantity, @price)";
         private const string GET_ALL_LINE_ITEM = "SELECT * FROM dbo.LineItem WHERE dbo.LineItem.order_id = @order";
+        private const string CHECK_PRODUCTID = "SELECT product_id FROM dbo.Product";
+
+        public bool CheckPorduct(int productId)
+        {
+            using SqlConnection conn = Connect.GetSqlConnection();
+
+            using SqlCommand cmd = Connect.GetSqlCommand(CHECK_PRODUCTID, conn);
+
+            try
+            {
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (productId == (int)reader["product_id"])
+                        return true;
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+
 
         public bool AddLineItem(LineItem item)
         {
+            if (orderDAO.checkOrder(item.OrderId) == false || CheckPorduct(item.ProductId) == false)
+            {
+                Console.WriteLine("Nhap id khong ton tai!");
+                return false;
+            }
+
             using SqlConnection connString = Connect.GetSqlConnection();
-            
+
             using SqlCommand cmd = Connect.GetSqlCommand(ADD_LINE_ITEM, connString);
 
             //them cac param 
