@@ -141,7 +141,7 @@ namespace NPL.SMS.R2S.Training.Main
                     }
                     else
                     {
-                        Console.WriteLine("Add_Customer failed! ");
+                        Console.WriteLine("Failed! ");
                     }
                 }
                 catch (Exception ex)
